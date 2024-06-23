@@ -1,0 +1,9 @@
+streamlit
+streamlit-webrtc
+pillow
+numpy
+opencv-python-headless
+sahi
+torch
+ultralytics
+av
