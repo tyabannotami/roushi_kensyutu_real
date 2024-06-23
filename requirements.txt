@@ -1,8 +1,8 @@
 streamlit
 streamlit-webrtc
 pillow
-numpy==1.21.2
-opencv-python-headless==4.5.3.56
+numpy==1.26.4
+opencv-python==4.8.1.78
 sahi
 torch
 ultralytics
