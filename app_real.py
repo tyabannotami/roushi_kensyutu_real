@@ -28,10 +28,7 @@ class YOLOv8Processor(VideoProcessorBase):
 
         # 検出結果の画像を描画
         object_predictions = result.object_prediction_list
-        result_image = visualize_object_predictions(img, object_predictions)
-        
-        # 検出結果の画像を描画
-        result_image = visualize_object_predictions(result.object_prediction_list, img)  # 修正箇所
+        result_image = visualize_object_predictions(img, object_predictions)  # 引数の順序を修正
 
         return av.VideoFrame.from_ndarray(result_image, format="bgr24")
 
