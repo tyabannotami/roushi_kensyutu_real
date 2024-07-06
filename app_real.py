@@ -28,7 +28,7 @@ class YOLOv8Processor(VideoProcessorBase):
 
         # 検出結果の画像を描画
         object_predictions = result.object_prediction_list
-        result_image = visualize_object_predictions(object_predictions, image=img)
+        result_image = visualize_object_predictions(img, object_predictions)
         
         # 検出結果の画像を描画
         result_image = visualize_object_predictions(result.object_prediction_list, img)  # 修正箇所
