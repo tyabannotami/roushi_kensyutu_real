@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode, RTCConfiguration
 import numpy as np
 import cv2
 from sahi import AutoDetectionModel
@@ -13,7 +13,7 @@ class YOLOv8Processor(VideoProcessorBase):
         self.model = AutoDetectionModel.from_pretrained(
             model_type='yolov8', 
             model_path='models/best.pt',
-            confidence_threshold=0.75,  # 一致率がどの程度まで表示するか
+            confidence_threshold=0.5,  # 一致率がどの程度まで表示するか
             device='cpu'  # GPUを使用しない場合は'cpu'に変更
         )
 
@@ -34,6 +34,7 @@ class YOLOv8Processor(VideoProcessorBase):
 st.title('大熊老師探しリアルタイム検出')
 st.subheader('Webカメラを使ってリアルタイムで大熊老師を検出します。')
 
+
 # エラーハンドリングの追加
 try:
     webrtc_ctx = webrtc_streamer(
@@ -41,6 +42,9 @@ try:
         video_processor_factory=YOLOv8Processor,
         media_stream_constraints={"video": True, "audio": False},
         async_processing=True,
+        rtc_configuration={  # この設定を足す
+            "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
+        }
     )
 except Exception as e:
     st.error(f"エラーが発生しました: {e}")
