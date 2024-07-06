@@ -30,6 +30,11 @@ class YOLOv8Processor(VideoProcessorBase):
         object_predictions = result.object_prediction_list
         result_image = visualize_object_predictions(img, object_predictions)  # 引数の順序を修正
 
+        if isinstance(result_image, dict):
+            # エラー処理: visualize_object_predictions が dict を返した場合
+            st.error("visualize_object_predictions returned a dict instead of an image.")
+            return frame  # 元のフレームを返す
+
         return av.VideoFrame.from_ndarray(result_image, format="bgr24")
 
 st.title('大熊老師探しリアルタイム検出')
