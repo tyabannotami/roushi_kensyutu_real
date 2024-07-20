@@ -12,7 +12,8 @@ import time
 model = YOLO('models/best.pt')
 
 # 最後の検出時間を保存する変数
-last_detection_time = 0
+if "last_detection_time" not in st.session_state:
+    st.session_state.last_detection_time = 0
 
 def callback(frame):
     img = frame.to_ndarray(format="bgr24")
