@@ -11,9 +11,12 @@ import time
 # YOLOv8の推論関数
 model = YOLO('models/best.pt')
 
-# 最後の検出時間を保存する変数
+# Session stateの初期化
 if "last_detection_time" not in st.session_state:
-    st.session_state.last_detection_time = 0
+    st.session_state["last_detection_time"] = 0
+
+if "play_audio" not in st.session_state:
+    st.session_state["play_audio"] = False
 
 def callback(frame):
     img = frame.to_ndarray(format="bgr24")
