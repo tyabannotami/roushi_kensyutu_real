@@ -35,10 +35,10 @@ def callback(frame):
                 img = cv2.putText(img, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
                 kensyutu_flag=True
 
-    # 検出された場合、最後の検出時間から5秒以上経過しているか確認
-    if kensyutu_flag and (current_time - last_detection_time > 5):
-        st.session_state["play_audio"] = True
-        last_detection_time = current_time
+   # 検出された場合、最後の検出時間から5秒以上経過しているか確認
+    if kensyutu_flag and (current_time - st.session_state.last_detection_time > 5):
+        st.session_state.last_detection_time = current_time
+        st.session_state.play_audio = True
 
     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
