@@ -8,15 +8,14 @@ from sahi.utils.cv import visualize_object_predictions
 import av
 from ultralytics import YOLO
 import time
+import threading
 # YOLOv8の推論関数
 model = YOLO('models/best.pt')
 
-# Session stateの初期化
-if "last_detection_time" not in st.session_state:
-    st.session_state["last_detection_time"] = 0
-
-if "play_audio" not in st.session_state:
-    st.session_state["play_audio"] = False
+# 検出フラグと時間を管理するための変数とロック
+kensyutu_flag = [False]
+last_detection_time = [0]
+lock = threading.Lock()
 
 def callback(frame):
     img = frame.to_ndarray(format="bgr24")
@@ -39,11 +38,28 @@ def callback(frame):
                 kensyutu_flag=True
 
    # 検出された場合、最後の検出時間から5秒以上経過しているか確認
-    if kensyutu_flag and (current_time - st.session_state.last_detection_time > 5):
-        st.session_state.last_detection_time = current_time
-        st.session_state.play_audio = True
+    with lock:
+        if kensyutu_flag and (current_time - last_detection_time[0] > 5):
+            last_detection_time[0] = current_time
+            kensyutu_flag[0] = True
 
     return av.VideoFrame.from_ndarray(img, format="bgr24")
+
+def check_detection():
+    while True:
+        time.sleep(1)
+        with lock:
+            if kensyutu_flag[0]:
+                st.session_state["play_audio"] = True
+                kensyutu_flag[0] = False
+
+# セッション状態の初期化
+if "play_audio" not in st.session_state:
+    st.session_state["play_audio"] = False
+
+# 背景スレッドで検出フラグをチェックするスレッドを開始
+thread = threading.Thread(target=check_detection, daemon=True)
+thread.start()
 
 st.title('大熊老師探しリアルタイム検出')
 st.subheader('Webカメラを使ってリアルタイムで大熊老師を検出します。')
@@ -66,6 +82,6 @@ except Exception as e:
     st.error(f"エラーが発生しました: {e}")
 
 # 音声再生のトリガーを確認して再生
-if "play_audio" in st.session_state and st.session_state["play_audio"]:
+if st.session_state["play_audio"]:
     st.session_state["play_audio"] = False
-    st.audio(audio_file, format='audio/wav')
+    st.audio(audio_file, format='audio/mp3')
