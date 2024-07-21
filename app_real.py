@@ -82,7 +82,9 @@ if bonabu:
 
 #音声出力
 while webrtc_ctx.state.playing:
-    time.sleep(1)
+    #処理間隔を5秒空ける
+    time.sleep(5)
+    
     genzai_time =time.time()
     with lock:
         if img_container["img"] =="TRUE" and genzai_time-old_time>5 : #前の処理から５秒以上経過の場合
@@ -93,3 +95,4 @@ while webrtc_ctx.state.playing:
             
         else:
             continue
+    
