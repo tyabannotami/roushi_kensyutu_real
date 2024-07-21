@@ -17,8 +17,8 @@ old_time =0
 def callback(frame):
     img = frame.to_ndarray(format="bgr24")
 
-    # YOLOv8を用いて検出を行う しきい値は0.6以上を指定
-    results = model.predict(img,conf=0.6)
+    # YOLOv8を用いて検出を行う しきい値は0.6以上,フレーム間隔は５を指定
+    results = model.predict(img,conf=0.6,vid_stride=5)
     # 検出結果の画像を描画
     for result in results:
             for box in result.boxes:
@@ -81,7 +81,7 @@ if bonabu:
 
 #音声出力
 while webrtc_ctx.state.playing:
-    time.sleep(2)
+    time.sleep(1)
     genzai_time =time.time()
     with lock:
         if img_container["img"] =="TRUE" and genzai_time-old_time>5 : #前の処理から５秒以上経過の場合
