@@ -17,8 +17,9 @@ old_time =0
 def callback(frame):
     img = frame.to_ndarray(format="bgr24")
 
-    # YOLOv8を用いて検出を行う しきい値は0.6以上,フレーム間隔は５を指定
-    results = model.predict(img,conf=0.6,vid_stride=60)
+    # YOLOv8を用いて検出を行う しきい値は0.6以上,フレーム間隔は60を指定
+    results = model.predict(img,conf=0.6)
+    time.sleep(0.1)
     # 検出結果の画像を描画
     for result in results:
             for box in result.boxes:
