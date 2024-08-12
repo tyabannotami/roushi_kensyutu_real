@@ -35,7 +35,7 @@ def callback(frame):
 
     return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-st.title('大熊老師探しリアルタイム検出')
+st.title('大熊老師リアルタイム検出（試作中）')
 st.subheader('Webカメラを使ってリアルタイムで大熊老師を検出します。')
 #一応つけた
 bonabu = st.button('ボナヴ～!')
